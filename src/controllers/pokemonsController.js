@@ -3,14 +3,14 @@ import pokemons from "../models/Pokemon.js";
 class PokemonController{
 
     static listPokemons = (req, res) => {
-        pokemons.find((err, pokemons) => {
+        pokemons.find().populate('type').exec((err, pokemons) => {
             res.status(200).json(pokemons);
         });
     }
     
     static listPokemonById = (req, res) => {
         const id = req.params.id;
-        pokemons.findById(id, (err, pokemon) => {
+        pokemons.findById(id).populate('type', 'name').exec((err, pokemon) => {
             if(err){
                 res.status(400).send({message: `${err.message} - Pokemon id not found!`})
             }else{

@@ -2,15 +2,20 @@ import types from "../models/Type.js"
 
 class TypeController{
     
+    
     static listTypes = (req, res) => {
-        types.find((err, types) => {
+        types.find().populate('weaknesses', 'name')
+        .populate('strengths', 'name').populate('ineffective', 'name')
+        .exec((err, types) => {
             res.status(200).json(types);
         });
     }
 
     static listTypeById = (req, res) => {
         const id = req.params.id;
-        types.findById(id, (err, type) => {
+        types.findById(id).populate('weaknesses', 'name')
+        .populate('strengths', 'name').populate('ineffective', 'name')
+        .exec((err, type) => {
             if(err){
                 res.status(400).send({message: `${err.message} - Type id not found!`});
             }else{
